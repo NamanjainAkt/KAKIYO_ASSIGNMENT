@@ -1,16 +1,23 @@
 "use client"
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Users, Briefcase, FileText, MessageSquare, ArrowRight } from 'lucide-react'
+import { Users, Briefcase, FileText, MessageSquare, ArrowRight, LucideIcon } from 'lucide-react'
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   Users,
   Briefcase,
   FileText,
   MessageSquare
 }
 
-export function DashboardGrid({ stats }: { stats: any[] }) {
+interface StatItem {
+  name: string
+  value: string | number
+  icon: string
+  href: string
+}
+
+export function DashboardGrid({ stats }: { stats: StatItem[] }) {
   return (
     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat, i) => {

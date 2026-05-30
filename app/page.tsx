@@ -4,7 +4,7 @@ import { eq, count } from "drizzle-orm"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import Link from "next/link"
-import { ArrowRight, Users, MessageSquare, Briefcase, FileText, Sparkles, Zap, Shield, Globe } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 import { DashboardGrid } from "@/components/ui/dashboard-grid"
 
 export default async function DashboardPage() {
@@ -23,7 +23,7 @@ export default async function DashboardPage() {
               <span className="italic text-amber-600 font-normal">Outreach</span>
             </h1>
             <p className="text-lg md:text-xl text-[#575752] max-w-2xl leading-relaxed font-medium">
-              Kakiyo is a premium sales development platform that crawls your prospects' sites, matches their needs with your offerings, and uses Gemini 2.5 to write responses they cannot ignore.
+              Kakiyo is a premium sales development platform that crawls your prospects&apos; sites, matches their needs with your offerings, and uses Gemini 2.5 to write responses they cannot ignore.
             </p>
             <div className="flex gap-6 items-center flex-wrap pt-4">
               <Link href="/sign-up" className="border-2 border-[#1C1C1A] bg-[#1C1C1A] text-white px-8 py-4 font-bold tracking-wide uppercase text-sm hover:bg-transparent hover:text-[#1C1C1A] transition-all duration-300 flex items-center gap-2 group">
@@ -84,9 +84,9 @@ export default async function DashboardPage() {
     <div className="max-w-6xl mx-auto p-8 md:p-12 space-y-12">
       <div className="border-b border-[#E5E5E0] pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-4xl md:text-5xl font-serif font-black tracking-tight text-[#1C1C1A]">
+          <h2 className="text-4xl md:text-5xl font-serif font-black tracking-tight text-[#1C1C1A]">
             Welcome back, <span className="italic font-normal text-amber-600">{session.user.name || session.user.email?.split('@')[0]}</span>
-          </h1>
+          </h2>
           <p className="text-base text-[#575752] mt-2 font-medium">Outreach overview and system analytics.</p>
         </div>
         <Link href="/messages" className="border-2 border-[#1C1C1A] bg-[#1C1C1A] text-white px-6 py-3 font-bold tracking-wide uppercase text-xs hover:bg-transparent hover:text-[#1C1C1A] transition-all flex items-center gap-2 group self-start md:self-auto">

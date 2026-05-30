@@ -3,7 +3,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserMenu } from "@/components/ui/user-menu";
 
-export function Navbar({ session }: { session: any }) {
+export interface NavbarSession {
+  session: {
+    id: string;
+    userId: string;
+    expiresAt: Date;
+  };
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
+
+export function Navbar({ session }: { session: NavbarSession | null }) {
   const pathname = usePathname();
 
   const links = [

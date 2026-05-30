@@ -19,11 +19,11 @@ vi.mock('@/lib/auth-client', () => ({
 describe('Auth Pages', () => {
   it('renders sign in form', () => {
     render(<SignInPage />)
-    expect(screen.getByRole('heading', { name: /sign in/i })).toBeDefined()
+    expect(screen.getByRole('heading', { name: /welcome back/i })).toBeDefined()
   })
 
   it('renders sign up form', () => {
     render(<SignUpPage />)
-    expect(screen.getByRole('heading', { name: /create an account/i })).toBeDefined()
+    expect(screen.getByRole('heading', { name: /get started/i })).toBeDefined()
   })
 })
