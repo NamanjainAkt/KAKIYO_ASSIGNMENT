@@ -46,10 +46,19 @@ ${customPrompt ? `Custom Instructions (FOLLOW THESE): ${customPrompt}` : ''}
 The prospect just replied to your conversation. Read the full chat history to understand the context, then write a natural follow-up response. Your reply should feel like the next message in a real human conversation — not a fresh AI generation.`
     });
 
-    const chat = model.startChat({
-        history: chatHistory
-    });
+    const formattedHistory = chatHistory.map(m => {
+        const sender = m.role === 'model' ? 'SDR (You)' : 'Prospect';
+        return `${sender}: ${m.parts[0].text}`;
+    }).join('\n\n');
 
-    const result = await chat.sendMessage(newMessage);
+    const prompt = `## CONVERSATION HISTORY
+${formattedHistory}
+
+Prospect: ${newMessage}
+
+## INSTRUCTIONS
+Write a natural follow-up response from the SDR. Your response should feel like the next message in a real human conversation — not a fresh AI generation. Do not prefix your response with "SDR:" or anything else, just write the message.`;
+
+    const result = await model.generateContent(prompt);
     return result.response.text().trim();
 }
