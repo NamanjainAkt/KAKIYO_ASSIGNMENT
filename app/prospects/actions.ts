@@ -31,7 +31,16 @@ export async function processProspectUrl(data: FormData) {
         textContent = await scrapeWithFirecrawl(url);
     } catch (e) {
         console.warn("Firecrawl failed, falling back to Cheerio", e);
-        textContent = await scrapeWithCheerio(url);
+        try {
+            textContent = await scrapeWithCheerio(url);
+        } catch (cheerioErr) {
+            console.warn("Cheerio failed as well", cheerioErr);
+            if (notes.trim()) {
+                textContent = `Website: ${url}\n(Note: Scraping failed, falling back to user notes)\nUser Notes:\n${notes}`;
+            } else {
+                throw new Error("Unable to scrape the URL, and no custom notes were provided to fall back on.");
+            }
+        }
     }
 
     const unifiedContext = await analyzeProspectText(textContent, notes);
