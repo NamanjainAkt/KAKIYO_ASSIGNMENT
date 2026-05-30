@@ -17,9 +17,13 @@ Return ONLY a valid JSON object with the following structure:
 If information is missing, use "Unknown" or empty arrays. Do not wrap in markdown codeblocks like \`\`\`json.
 `;
 
-export async function analyzeProspectText(text: string) {
+export async function analyzeProspectText(text: string, notes?: string) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-  const result = await model.generateContent([SYSTEM_PROMPT, text]);
+  let inputContent = text;
+  if (notes) {
+    inputContent += `\n\nADDITIONAL PROSPECT NOTES PROVIDED BY USER:\n${notes}`;
+  }
+  const result = await model.generateContent([SYSTEM_PROMPT, inputContent]);
   const response = await result.response;
   let responseText = response.text().trim();
   // Strip potential markdown
@@ -28,12 +32,16 @@ export async function analyzeProspectText(text: string) {
   } else if (responseText.startsWith('```')) {
       responseText = responseText.replace(/```\n?/, '').replace(/```$/, '').trim();
   }
-  return JSON.parse(responseText);
+  const parsed = JSON.parse(responseText);
+  if (notes) {
+    parsed.customNotes = notes;
+  }
+  return parsed;
 }
 
-export async function analyzeProspectImage(base64Image: string, mimeType: string) {
+export async function analyzeProspectImage(base64Image: string, mimeType: string, notes?: string) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-  const result = await model.generateContent([
+  const promptParts: (string | { inlineData: { data: string; mimeType: string } })[] = [
     SYSTEM_PROMPT,
     {
       inlineData: {
@@ -41,7 +49,11 @@ export async function analyzeProspectImage(base64Image: string, mimeType: string
         mimeType
       }
     }
-  ]);
+  ];
+  if (notes) {
+    promptParts.push(`\n\nADDITIONAL PROSPECT NOTES PROVIDED BY USER:\n${notes}`);
+  }
+  const result = await model.generateContent(promptParts);
   const response = await result.response;
   let responseText = response.text().trim();
   if (responseText.startsWith('```json')) {
@@ -49,5 +61,9 @@ export async function analyzeProspectImage(base64Image: string, mimeType: string
   } else if (responseText.startsWith('```')) {
       responseText = responseText.replace(/```\n?/, '').replace(/```$/, '').trim();
   }
-  return JSON.parse(responseText);
+  const parsed = JSON.parse(responseText);
+  if (notes) {
+    parsed.customNotes = notes;
+  }
+  return parsed;
 }

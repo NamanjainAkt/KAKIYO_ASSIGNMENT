@@ -98,6 +98,13 @@ export function AddProspectForm() {
               )}
             </motion.div>
           </AnimatePresence>
+
+          <textarea 
+            name="notes" 
+            placeholder="Custom Notes (e.g., key initiatives, pain points, specific observations)" 
+            rows={3}
+            className="w-full rounded-none border border-[#E5E5E0] bg-[#FBFBFA] p-3 outline-none focus:border-[#1C1C1A] focus:ring-1 focus:ring-[#1C1C1A] transition-all text-sm resize-none"
+          />
         </div>
         
         <button 

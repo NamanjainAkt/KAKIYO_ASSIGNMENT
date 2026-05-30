@@ -23,6 +23,7 @@ export async function processProspectUrl(data: FormData) {
 
     const url = data.get('url') as string;
     const name = data.get('name') as string;
+    const notes = data.get('notes') as string || "";
     if (!url || !name) throw new Error("Missing url or name");
 
     let textContent = "";
@@ -33,7 +34,7 @@ export async function processProspectUrl(data: FormData) {
         textContent = await scrapeWithCheerio(url);
     }
 
-    const unifiedContext = await analyzeProspectText(textContent);
+    const unifiedContext = await analyzeProspectText(textContent, notes);
 
     const [newProspect] = await db.insert(prospects).values({
         userId: session.user.id,
@@ -55,6 +56,7 @@ export async function processProspectImage(data: FormData) {
 
     const file = data.get('image') as File;
     const name = data.get('name') as string;
+    const notes = data.get('notes') as string || "";
     if (!file || !name) throw new Error("Missing image or name");
 
     const imageUrl = await uploadFileToCloudinary(file);
@@ -64,7 +66,7 @@ export async function processProspectImage(data: FormData) {
     const base64Image = buffer.toString('base64');
     const mimeType = file.type || 'image/png';
 
-    const unifiedContext = await analyzeProspectImage(base64Image, mimeType);
+    const unifiedContext = await analyzeProspectImage(base64Image, mimeType, notes);
 
     const [newProspect] = await db.insert(prospects).values({
         userId: session.user.id,
